@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = "https://suitmedia-backend.suitdev.com/api/ideas";
+const API_URL = import.meta.env.DEV
+  ? "/api/ideas"
+  : "https://suitmedia-backend.suitdev.com/api/ideas";
 
 function Banner() {
   const [offsetY, setOffsetY] = useState(0);
