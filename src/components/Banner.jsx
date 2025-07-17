@@ -29,7 +29,7 @@ function Banner() {
 
         const idea = res.data.data?.[0];
         const url = idea?.medium_image?.[0]?.url;
-        const fallback = "https://placehold.co/1200x500?text=Banner+Unavailable&font=roboto";
+        const fallback = "https://www.flyhpa.com/files/2017/07/2017.07.06-06.53-flyhpa-595e871fc6722.jpg";
 
         if (!url || url.includes("assets.suitdev.com")) {
             setBannerUrl(fallback);
