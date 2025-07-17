@@ -1,3 +1,1 @@
-# Question 1
-
-Images for thumbnails are inaccessible
+The application successfully uses a proxy to interact with the Suitmedia API at https://suitmedia-backend.suitdev.com/api/ideas, including append[]=small_image&append[]=medium_image. However, images returned via the small_image and medium_image fields are hosted on https://assets.suitdev.com, which implements strict CORS and hotlink protection. As a result, these thumbnails cannot be displayed in the frontend without backend-side proxying. The banner image is dynamically loaded from the /api/ideas endpoint by retrieving the medium_image of the latest idea. However, the actual image is hosted on https://assets.suitdev.com, which blocks third-party rendering via hotlink protection (403 AccessDenied). As a result, the image cannot be displayed and a placeholder image is used.
