@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams, Link } from "react-router-dom";
 
-const API_URL = import.meta.env.PROD
-  ? "https://suitmedia-backend.suitdev.com/api/ideas"
-  : "/api/ideas";
+const API_URL = "https://suitmedia-backend.suitdev.com/api/ideas";
 
 function IdeasList() {
   const [ideas, setIdeas] = useState([]);

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = "https://suitmedia-backend.suitdev.com/api/ideas";
+
 function Banner() {
   const [offsetY, setOffsetY] = useState(0);
   const [bannerUrl, setBannerUrl] = useState("");
