@@ -33,8 +33,10 @@ function IdeasList() {
         },
       });
 
-      setIdeas(response.data.data);
-      setTotal(response.data.meta.total);
+        console.log(response.data.data[0]);
+
+        setIdeas(response.data.data);
+        setTotal(response.data.meta.total);
     } catch (error) {
       console.error("Error fetching ideas", error);
     }
@@ -53,18 +55,18 @@ function IdeasList() {
     setSearchParams({ page: newPage, size, sort });
   };
 
-  const totalPages = Math.ceil(total / size);
+    const totalPages = Math.ceil(total / size);
 
-  const fallback = "https://via.placeholder.com/400x300?text=No+Image";
+    const fallback = "https://via.placeholder.com/400x300?text=No+Image";
 
-  const getThumbnail = (idea) => {
-    const smallImg = idea.small_image?.[0]?.url;
-    const mediumImg = idea.medium_image?.[0]?.url;
+    const getThumbnail = (idea) => {
+        const mediumImg = idea.medium_image?.[0]?.url;
+        const smallImg = idea.small_image?.[0]?.url;
+        const rawUrl =  mediumImg || smallImg;
 
-    const rawUrl = smallImg || mediumImg;
+    return rawUrl ? rawUrl : fallback;
+    };
 
-    return rawUrl ? encodeURI(rawUrl) : fallback;
-  };
 
   return (
     <section className="max-w-6xl mx-auto p-4">
@@ -107,13 +109,11 @@ function IdeasList() {
               key={idea.id}
               className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
             >
-              <img
-                src={getThumbnail(idea)}
-                    alt={idea.title}
-                    className="w-full h-full object-cover absolute top-0 left-0"
-                    loading="lazy"
-                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
-              />
+            <div className="relative h-[200px] bg-gray-100 bg-cover bg-center"
+                style={{
+                    backgroundImage: `url(${getThumbnail(idea)})`,
+                }}
+            ></div>
 
               <div className="p-4">
                 <p className="text-xs text-gray-400 mb-1">
@@ -191,6 +191,7 @@ function IdeasList() {
             disabled={page === totalPages}
             className="px-2 py-1 text-sm border rounded-md disabled:opacity-30"
           >
+            ››
           </button>
         </div>
       )}
