@@ -22,7 +22,7 @@ function Banner() {
   useEffect(() => {
     const fetchBannerImage = async () => {
       try {
-        const res = await axios.get("/api/ideas", {
+        const res = await axios.get("API_URL", {
           params: {
             "page[number]": 1,
             "page[size]": 1,
