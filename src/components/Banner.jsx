@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+console.log("🚀 Production using absolute API URL:", API_URL);
 
 const API_URL = "https://suitmedia-backend.suitdev.com/api/ideas";
 
