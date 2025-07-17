@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams, Link } from "react-router-dom";
 
+const API_URL = import.meta.env.PROD
+  ? "https://suitmedia-backend.suitdev.com/api/ideas"
+  : "/api/ideas";
+
 function IdeasList() {
   const [ideas, setIdeas] = useState([]);
   const [total, setTotal] = useState(0);
@@ -20,7 +24,7 @@ function IdeasList() {
   const fetchIdeas = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("/api/ideas", {
+      const response = await axios.get(API_URL, {
         params: {
           "page[number]": page,
           "page[size]": size,
@@ -50,6 +54,17 @@ function IdeasList() {
   };
 
   const totalPages = Math.ceil(total / size);
+
+  const fallback = "https://via.placeholder.com/400x300?text=No+Image";
+
+  const getThumbnail = (idea) => {
+    const smallImg = idea.small_image?.[0]?.url;
+    const mediumImg = idea.medium_image?.[0]?.url;
+
+    const rawUrl = smallImg || mediumImg;
+
+    return rawUrl ? encodeURI(rawUrl) : fallback;
+  };
 
   return (
     <section className="max-w-6xl mx-auto p-4">
@@ -86,48 +101,34 @@ function IdeasList() {
         <p className="text-center text-gray-500">Loading...</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-          {ideas.map((idea) => {
-
-            let thumbnail = "https://via.placeholder.com/400x300?text=No+Image";
-
-            const smallImg = idea.small_image?.[0]?.url;
-            const mediumImg = idea.medium_image?.[0]?.url;
-
-            thumbnail = smallImg || mediumImg || thumbnail;
-
-            thumbnail = thumbnail.replace(/\(/g, "%28").replace(/\)/g, "%29").replace(/ /g, "%20");
-
-
-            return (
-                <Link
-                    to={`/ideas/${idea.slug}`}
-                    key={idea.id}
-                    className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-                >
-                    <img
-                    src={thumbnail}
+          {ideas.map((idea) => (
+            <Link
+              to={`/ideas/${idea.slug}`}
+              key={idea.id}
+              className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+            >
+              <img
+                src={getThumbnail(idea)}
                     alt={idea.title}
-                    className="w-full aspect-[4/3] object-cover"
+                    className="w-full h-full object-cover absolute top-0 left-0"
                     loading="lazy"
-                />
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
 
-
-                <div className="p-4">
-                  <p className="text-xs text-gray-400 mb-1">
-                    {new Date(idea.published_at).toLocaleDateString("id-ID", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </p>
-                  <h2 className="text-lg font-bold line-clamp-3">
-                    {idea.title}
-                  </h2>
-                </div>
-              </Link>
-            );
-          })}
+              <div className="p-4">
+                <p className="text-xs text-gray-400 mb-1">
+                  {new Date(idea.published_at).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+                <h2 className="text-lg font-bold line-clamp-3">
+                  {idea.title}
+                </h2>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
 
@@ -190,7 +191,6 @@ function IdeasList() {
             disabled={page === totalPages}
             className="px-2 py-1 text-sm border rounded-md disabled:opacity-30"
           >
-            »
           </button>
         </div>
       )}
