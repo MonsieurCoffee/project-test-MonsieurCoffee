@@ -32,8 +32,10 @@ function Banner() {
         const fallback = "https://www.flyhpa.com/files/2017/07/2017.07.06-06.53-flyhpa-595e871fc6722.jpg";
 
         if (!url || url.includes("assets.suitdev.com")) {
+            console.log("Using fallback banner:", fallback);
             setBannerUrl(fallback);
         } else {
+            console.log("Using real image:", url);
             setBannerUrl(url);
         }
 
